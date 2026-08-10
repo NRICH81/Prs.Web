@@ -3,38 +3,37 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
-
-import { IRequestLines} from "./IRequestLines";
+import { IRequestLine} from "./IRequestLine";
 import { IProducts } from "../products/IProducts";
 import { productsAPI } from "../products/ProductsAPI";
-import { requestLinesAPI } from "./RequestLinesAPI";
+import { requestLineAPI } from "./RequestLineAPI";
 
-function RequestLinesForm() {
-  let { itemId, id } = useParams<{ itemId: string; id: string }>();
-  const requestLinesId = Number(itemId);
-  const requestsId = Number(id);
+function RequestLineForm() {
+const { id, itemId } = useParams<{ id: string; itemId: string }>();
+const requestsId = Number(id);
+const RequestLineId = Number(itemId);
   const navigate = useNavigate();
   const [products, setProducts] = useState<IProducts[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<IProducts | undefined>(undefined);
 
-  let emptyRequestLines: IRequestLines = { id: undefined, quantity: 1, description: "", vendorId: undefined, productId: undefined, product: undefined, requests: undefined, productsId: undefined, emptyRequestLines: null };
+  const emptyRequestLine: IRequestLine = { id: undefined, product: undefined, quantity: 1, description: "", vendorId: undefined,  productsId: undefined, requests: undefined, requestsId: requestsId, emptyRequestLine: null };
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<IRequestLines>({
-    defaultValues: async () => {
-      try {
-        await loadProducts();
-        if (!itemId) return emptyRequestLines;
-        return await requestLinesAPI.find(requestLinesId);
-      } catch (error: any) {
-        toast.error(error.message, { duration: 6000 });
-        return emptyRequestLines;
-      }
-    },
+  } = useForm<IRequestLine>({
+defaultValues: async () => {
+  try {
+    await loadProducts();
+    if (!itemId) return emptyRequestLine;
+    return await requestLineAPI.find(RequestLineId);
+  } catch (error: unknown) {
+    toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
+    return emptyRequestLine;
+  }
+},
   });
 
   async function loadProducts() {
@@ -42,25 +41,26 @@ function RequestLinesForm() {
     setProducts(data);
   }
 
-  let productsId = watch("productsId");
-  let quantity = watch("quantity");
+  const productsId = watch("productsId");
+  const quantity = watch("quantity");
 
   useEffect(() => {
-    let currentProducts = products.find((m) => m?.id === productsId);
+    const currentProducts = products.find((m) => m?.id === productsId);
     setSelectedProduct(currentProducts);
-  }, [productsId]);
+  }, [productsId, products]);
 
-  const save: SubmitHandler<IRequestLines > = async (requestLines) => {
+const save: SubmitHandler<IRequestLine> = async (RequestLine) => {
     try {
-      if (!requestLines.id) {
-        requestLines = await requestLinesAPI.post(requestLines);
+      RequestLine.requestsId = requestsId;   // always tie the line back to its parent request
+      if (!RequestLine.id) {
+        RequestLine = await requestLineAPI.post(RequestLine);
       } else {
-        await requestLinesAPI.put(requestLines);
+        await requestLineAPI.put(RequestLine);
       }
       toast.success("Successfully saved.");
-      navigate(`/requests/detail/${requestLines.productId}`);
-    } catch (error: any) {
-      toast.error(error.message);
+      navigate(`/requests/detail/${requestsId}`);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Unexpected error");
     }
   };
 
@@ -132,4 +132,4 @@ function RequestLinesForm() {
   );
 }
 
-export default RequestLinesForm;
+export default RequestLineForm;

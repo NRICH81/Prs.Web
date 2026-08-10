@@ -19,7 +19,7 @@ interface IRequestsRowProps {
     <tr>
       <th scope="row">{request.id}</th>
       <td>{request.description}</td>
-      <td className="text-body-secondary small text-wrap">{request.justification || "—"}</td>
+      
       <td>
         <span className={`badge ${getTextBackgroundByStatus(request.status)}`}>
           {request.status}
@@ -27,9 +27,7 @@ interface IRequestsRowProps {
       </td>
       <td>${request.total}</td>
     
-      <td>
-        {request.deliveryMode}
-      </td>
+      <td>{request.user?.firstName} {request.user?.lastName}</td>
  
        <td>
          <Dropdown className="d-inline">
@@ -49,8 +47,8 @@ interface IRequestsRowProps {
                      await requestsAPI.delete(request.id);
                      onRemove(request);   // tell the parent to drop the row
                      toast.success("Successfully deleted.");
-                   } catch (error: any) {
-                     toast.error(error.message, { duration: 6000 });
+                   } catch (error: unknown) {
+                     toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
                    }
                  }
                }

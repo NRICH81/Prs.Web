@@ -29,8 +29,8 @@ function ProductsCard({ products, onRemove }: IProductsCardProps) {
                    await productsAPI.delete(products.id);
                    onRemove(products);
                    toast.success("Successfully deleted.");
-                 } catch (error: any) {
-                   toast.error(error.message, { duration: 6000 });
+                 } catch (error: unknown) {
+                   toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
                  }
                }
              }}>Delete</Dropdown.Item>

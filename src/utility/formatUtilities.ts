@@ -9,11 +9,12 @@
 
 export function getTextBackgroundByStatus(status: string) {
   switch (status) {
-    case "PLACED":    return "text-bg-secondary";
-    case "PREPARING": return "text-bg-warning";
-    case "READY":     return "text-bg-info";
-    case "SERVED":    return "text-bg-success";
-    case "CANCELLED": return "text-bg-danger";
+    case "APPROVED":    return "text-bg-secondary";
+    case "NEW": return "text-bg-warning";
+    case "REVIEW":     return "text-bg-info";
+    case "REJECTED":    return "text-bg-danger";
+    case "Rejected":    return "text-bg-danger";
+
     default:          return "";
   }
 }

@@ -19,8 +19,8 @@ function RequestsPage() {
       try {
         const data = await requestsAPI.list(status);
         setRequests(data);
-      } catch (error: any) {
-        toast.error(error.message, { duration: 6000 });
+      } catch (error: unknown) {
+        toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
       }
     })();
   }, [status]);
@@ -43,13 +43,24 @@ function RequestsPage() {
           onChange={handleStatusChange}
         >
           <option value="">All</option>
-          <option value="PLACED">Placed</option>
-          <option value="PREPARING">Preparing</option>
-          <option value="READY">Ready</option>
-          <option value="SERVED">Served</option>
-          <option value="CANCELLED">Cancelled</option>
+          <option value="APPROVED">Approved</option>
+          <option value="NEW">New</option>
+          <option value="REVIEW">Review</option>
+          <option value="REJECTED">Rejected</option>
+        
         </select>
         <table className="table table-hover w-100 rounded-4">
+                    <thead>
+            <tr>
+              <th scope="col"> #</th>
+              <th scope="col">Description</th>
+              <th scope="col">Status</th>
+              <th scope="col">Total</th>
+              <th scope="col">Requested By</th>
+         
+              <th scope="col"></th>
+            </tr>
+          </thead>
           <tbody>
             {requests.map((request) => (
               <RequestsRow key={request.id} request={request} onRemove={removeRequest} />

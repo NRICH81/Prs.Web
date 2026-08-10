@@ -19,7 +19,7 @@ export const productsAPI = {
     }).then(checkStatus).then(parseJSON);
   },
   put(Products: IProducts): Promise<IProducts> {
-    return fetch(`${url}/${Products.vendorId}`, {
+    return fetch(`${url}/${Products.id}`, {
       method: "PUT",
       body: JSON.stringify(Products),
       headers: { "Content-Type": "application/json" },

@@ -1,6 +1,6 @@
 import UserForm from "./UserFormPage";
 
-function UserEditPage() {
+function UsersEditPage() {
 	return (
 		<section className="content container-fluid mx-5 my-2 py-4">
 			<div className="d-flex justify-content-between pb-4 mb-5 border-bottom border-2">
@@ -11,4 +11,4 @@ function UserEditPage() {
 	);
 }
 
-export default UserEditPage;
+export default UsersEditPage;

@@ -33,8 +33,8 @@ function VendorCard({ vendor, onRemove }: IVendorCardProps) {
                     await vendorAPI.delete(vendor.id);
                     onRemove(vendor);
                     toast.success("Successfully deleted.");
-                  } catch (error: any) {
-                    toast.error(error.message, { duration: 6000 });
+                  } catch (error: unknown) {
+                    toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
                   }
                 }
               }}

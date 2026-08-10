@@ -6,7 +6,7 @@ import type { IRequests } from "./IRequests";
 import type { IUsers} from "../users/IUsers";
 import { requestsAPI } from "./RequestsAPI";
 import { userAPI } from "../users/UserAPI";
-import { useUserContext } from "../App";
+import { useUserContext } from "../UserContext";
 import toast from "react-hot-toast";
 
 function RequestsForm() {
@@ -27,14 +27,14 @@ function RequestsForm() {
   } = useForm<IRequests>({
     defaultValues: async () => {
       const emptyRequest: IRequests = {
-          id: undefined, user: undefined, status: "REJECTION", rejectionReason: null, requestLines: [],userId: undefined,
-        description: undefined, justification: undefined, deliveryMode: undefined, total: undefined, 
-        orderNumber: undefined, firstName: undefined, lastName: undefined, vendorId: undefined, emptyRequest: null
+          id: undefined, user: undefined, status: "NEW", rejectionReason: null, requestLine: [],userId: undefined,
+        description: undefined, justification: undefined, deliveryMode: undefined, total: undefined,
+        orderNumber: undefined, requested: undefined
       };
 
       await loadUser();
       if (!id) {
-        emptyRequest.user = user?.firstName + " " + user?.lastName;
+        emptyRequest.user = user;
         return emptyRequest;
       }
 
@@ -60,69 +60,92 @@ function RequestsForm() {
     toast.success("Successfully saved.");
   };
 
-  return (
-    <form className="d-flex flex-wrap w-75 gap-4" onSubmit={handleSubmit(save)}>
-      <div className="mb-3 w-50">
-        <label htmlFor="tableNumber" className="form-label">Table Number</label>
-        <input
-          id="tableNumber"
-          type="number"
-          {...register("orderNumber", {
-            required: "Table number is required",
-            valueAsNumber: true,
-          })}
-          className={`form-control ${errors?.orderNumber ? "is-invalid" : ""}`}
-        />
-        <div className="invalid-feedback">{errors?.orderNumber?.message}</div>
+   return (
+    <form className="d-flex flex-wrap w-50 gap-2" onSubmit={handleSubmit(save)}>
+      <div className="d-flex flex-row w-100 gap-4">
+        <div className="mb-3 w-50">
+          <label htmlFor="description" className="form-label">Description</label>
+          <input
+            id="description"
+            type="text"
+            placeholder="Please enter description for request."
+            {...register("description", {
+              required: "Description is required",
+            })}
+            className={`form-control ${errors?.description ? "is-invalid" : ""}`}
+          />
+          <div className="invalid-feedback">{errors?.description?.message}</div>
+        </div>
+
+        <div className="mb-3 w-50">
+          <label htmlFor="deliveryMode" className="form-label">Delivery Method</label>
+          <select
+            id="deliveryMode"
+            defaultValue=""
+            {...register("deliveryMode", { required: "Delivery Method is required" })}
+            className={`form-select ${errors?.deliveryMode ? "is-invalid" : ""}`}
+          >
+            <option value="">Select Delivery Method...</option>
+            <option value="PICKUP">Pickup</option>
+            <option value="DELIVERY">Delivery</option>
+            <option value="SIGNATURE_DELIVERY">Signature Delivery</option>
+          </select>
+          <div className="invalid-feedback">{errors?.deliveryMode?.message}</div>
+        </div>
       </div>
 
-      <div className="mb-3 w-75">
-        <label htmlFor="notes" className="form-label">Notes</label>
-        <textarea
-          id="notes"
-          rows={3}
-          {...register("description")}
-          className="form-control"
-        ></textarea>
+      <div className="d-flex flex-row w-100 gap-4">
+        <div className="mb-3 w-50">
+          <label htmlFor="justification" className="form-label">Justification</label>
+          <input
+            id="justification"
+            type="text"
+            placeholder="Enter a justification for your purchase request"
+            {...register("justification", { required: "Justification is required" })}
+            className={`form-control ${errors?.justification ? "is-invalid" : ""}`}
+          />
+          <div className="invalid-feedback">{errors?.justification?.message}</div>
+        </div>
+
+        <div className="mb-3 w-50">
+          <label htmlFor="status" className="form-label">Status</label>
+          <select
+            id="status"
+            defaultValue="NEW"
+            disabled={!isEdit}
+            {...register("status", { required: "Status is required" })}
+            className={`form-select ${errors?.status ? "is-invalid" : ""}`}
+          >
+            <option value="NEW">New</option>
+            <option value="REVIEW">Review</option>
+            <option value="APPROVED">Approved</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+          <div className="invalid-feedback">{errors?.status?.message}</div>
+        </div>
       </div>
 
-      <div className="mb-3 w-50">
-        <label htmlFor="status" className="form-label">Status</label>
-        <select
-          id="status"
-          defaultValue="PLACED"
-          disabled={!isEdit}
-          {...register("status", { required: "Status is required" })}
-          className={`form-select ${errors?.status ? "is-invalid" : ""}`}
-        >
-          <option value="PLACED">Approved</option>
-          <option value="PREPARING">New</option>
-          <option value="READY">Review</option>
-          <option value="SERVED">Rejected</option>
-        
-        </select>
-        <div className="invalid-feedback">{errors?.status?.message}</div>
+      <div className="d-flex flex-row w-100 justify-content-end gap-4">
+        <div className="mb-3 w-50">
+          <label htmlFor="userId" className="form-label">Requested By</label>
+          <select
+            id="userId"
+            disabled
+            {...register("userId", {
+              required: "User is required",
+              valueAsNumber: true,
+            })}
+            className={`form-select ${errors?.userId ? "is-invalid" : ""}`}
+          >
+            {userList.map((s) => (
+              <option key={s.id} value={s.id}>{s.firstName} {s.lastName}</option>
+            ))}
+          </select>
+          <div className="invalid-feedback">{errors?.userId?.message}</div>
+        </div>
       </div>
 
-      <div className="mb-3 w-50">
-        <label htmlFor="userId" className="form-label">User</label>
-        <select
-          id="userId"
-          disabled
-          {...register("userId", {
-            required: "User is required",
-            valueAsNumber: true,
-          })}
-          className={`form-select ${errors?.userId ? "is-invalid" : ""}`}
-        >
-          {userList.map((s) => (
-            <option key={s.id} value={s.id}>{s.firstName} {s.lastName}</option>
-          ))}
-        </select>
-        <div className="invalid-feedback">{errors?.userId?.message}</div>
-      </div>
-
-      <div className="d-flex justify-content-end w-75 mt-4">
+      <div className="d-flex justify-content-end w-100 mt-4">
         <Link to="/requests" className="btn btn-outline-primary me-2">Cancel</Link>
         <button type="submit" className="btn btn-primary">
           <svg className="bi pe-none me-1" width={16} height={16} fill="#FFFFFF">
@@ -134,5 +157,6 @@ function RequestsForm() {
     </form>
   );
 }
+   
 
 export default RequestsForm;

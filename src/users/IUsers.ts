@@ -8,7 +8,6 @@ export interface IUsers {
   email: string;
   isReviewer: boolean;
   isAdmin: boolean;
- 
   roles?: string[];
 }
 

@@ -25,8 +25,8 @@ function ProductsPage() {
       try {
         const data = await productsAPI.list();
         setProducts(data);
-      } catch (error: any) {
-        toast.error(error.message, { duration: 6000 });
+      } catch (error: unknown) {
+        toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
       } finally {
         setLoading(false);
       }

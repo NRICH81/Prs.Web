@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import type { IUser} from './IUser'
+import type { IUsers } from './IUsers'
 import { userAPI } from './UserAPI'
 import UserCard from './UserCard'
 import UserCardSkeleton from "./UserCardSkeleton";
 
 function UserPage() {
   const [loading, setLoading] = useState(false);
-  const [users, setUsers  ] = useState<IUser[]>([]);
+  const [users, setUsers  ] = useState<IUsers[]>([]);
   const userCardSkeletons = Array.from(Array(12), (_value, index) => (
     <UserCardSkeleton key={index} />
   ));
 
-  function removeUser(user: IUser) {
+  function removeUser(user: IUsers) {
     setUsers((currentUser) =>
       currentUser.filter((s) => s.id !== user.id)
     );
@@ -26,8 +26,8 @@ function UserPage() {
       try {
         const data = await userAPI.list();
         setUsers(data);
-      } catch (error: any) {
-        toast.error(error.message, { duration: 6000 });
+      } catch (error: unknown) {
+        toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
       } finally {
         setLoading(false);
       }

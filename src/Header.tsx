@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
-import { useUserContext } from "./App";
+import { useUserContext } from "./UserContext";
 
 function Header() {
   const { user, setUser } = useUserContext();

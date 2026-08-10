@@ -1,4 +1,4 @@
-import type { IUser } from './IUser';
+import type { IUsers } from './IUsers';
 import bootstrapIcons from '../assets/bootstrap-icons.svg';
 import { userAPI } from './UserAPI';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -7,8 +7,8 @@ import toast from 'react-hot-toast';
 import { formatPhoneNumber } from '../utility/formatUtilities';
 
 interface IUserCardProps {
-  User: IUser;
-  onRemove: (User: IUser) => void;
+  User: IUsers;
+  onRemove: (User: IUsers) => void;
 }
 
 function UserCard({ User, onRemove }: IUserCardProps) {
@@ -33,7 +33,7 @@ function UserCard({ User, onRemove }: IUserCardProps) {
               </svg>
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item as={Link} to={`/User/edit/${User.id}`}>Edit</Dropdown.Item>
+              <Dropdown.Item as={Link} to={`/Users/edit/${User.id}`}>Edit</Dropdown.Item>
               <Dropdown.Item as="a" href="#" onClick={async (event) => {
                 event.preventDefault();
                 if (confirm('Delete this User member?') && User.id) {
@@ -41,8 +41,8 @@ function UserCard({ User, onRemove }: IUserCardProps) {
                     await userAPI.delete(User.id);
                     onRemove(User);
                     toast.success('Successfully deleted.');
-                  } catch (error: any) {
-                    toast.error(error.message, { duration: 6000 });
+                  } catch (error: unknown) {
+                    toast.error(error instanceof Error ? error.message : 'Unexpected error', { duration: 6000 });
                   }
                 }
               }}>Delete</Dropdown.Item>

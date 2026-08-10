@@ -2,16 +2,16 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { userAPI } from "../users/UserAPI";
-import { useUserContext } from "../App";
+import { useUserContext } from "../UserContext";
 import {  IUsers } from "../users/IUsers";
 
 interface IAccount { username: string; password: string; }
 
 function persistuser(user: IUsers) {
-  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("users", JSON.stringify(user));
 }
 
-function SignInPage() {
+function SignIn() {
   const navigate = useNavigate();
   const { setUser } = useUserContext();
   const { register, handleSubmit, formState: { errors } } = useForm<IAccount>({
@@ -20,26 +20,25 @@ function SignInPage() {
 
   const signin: SubmitHandler<IAccount> = async (account) => {
     try {
-      const { password: _, ...safeuser } = await userAPI.findByAccount(
+      const { password: _password, ...safeuser } = await userAPI.findByAccount(
         account.username, account.password
       );
       persistuser(safeuser as IUsers);   // localStorage
       setUser(safeuser as IUsers);        // context
       navigate("/requests");
-    } catch (error: any) {
+    } catch {
       toast.error("Unsuccessful sign in. Please try again.");
     }
   };
 
   return (
     <main className="signin d-flex flex-column gap-4 justify-content-center align-items-center">
-      <svg width={100} height={78} viewBox="0 0 78 32" fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-        <path d="M55.5 0H77.5L58.5 32H36.5L55.5 0Z" fill="#FF7A00" />
-        <path d="M35.5 0H51.5L32.5 32H16.5L35.5 0Z" fill="#FF9736" />
-        <path d="M19.5 0H31.5L12.5 32H0.5L19.5 0Z" fill="#FFBC7D" />
-      </svg>
-      <span className="mx-2 fw-semibold" style={{ color: "#FF7A00" }}>TableServe</span>
+     <svg width={100} height={78} viewBox="1 2 48 34" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <path d="M16.499 2H37.5808L22.0816 24.9729H1L16.4992 2Z" fill="#007AFF" />
+  <path d="M17.4224 27.102L11.4192 36H33.5008L49 13.0271H32.7024L23.2064 27.102H17.4224Z" fill="#312ECB" />
+</svg>
+        <span className="medium mx-2 fw-semibold">Purchase Request System</span>
 
       <div className="card w-25 p-4">
         <h4 className="card-title">Sign in</h4>
@@ -70,4 +69,4 @@ function SignInPage() {
   );
 }
 
-export default SignInPage;
+export default SignIn;

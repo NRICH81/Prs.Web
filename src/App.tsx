@@ -1,22 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";   // back in App now (it left the tree in Lesson 5)
 import "./App.css";
 import { Outlet } from "react-router-dom";
-import { createContext, useContext, useState } from "react";
+import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { IUsers } from "./users/IUsers";
+import { UserContext } from "./UserContext";
 
-export interface UserContextType {
-  user: IUsers | undefined;
-  setUser: React.Dispatch<React.SetStateAction<IUsers | undefined>>;
-}
-
-const UserContext = createContext<UserContextType | undefined>(undefined);
-
-export function useUserContext(): UserContextType {
-  const userContext = useContext(UserContext);
-  if (userContext === undefined) throw new Error("context not found");
-  return userContext;
-}
  function getPersistedUser() {
    const userAsJSON = localStorage.getItem("users");
    if (!userAsJSON) return undefined;
