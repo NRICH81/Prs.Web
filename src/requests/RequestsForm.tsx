@@ -1,12 +1,13 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { IRequests } from "./IRequests";
 import type { IUsers} from "../users/IUsers";
 import { requestsAPI } from "./RequestsAPI";
 import { userAPI } from "../users/UserAPI";
 import { useUserContext } from "../UserContext";
+import { useRequest } from "./useRequest";
 import toast from "react-hot-toast";
 
 function RequestsForm() {
@@ -15,42 +16,40 @@ function RequestsForm() {
   const isEdit = Boolean(id);
   const { user: user } = useUserContext();
   const [userList, setUserList] = useState<IUsers[]>([]);
+  const { request: existingRequest } = useRequest(id ? Number(id) : undefined);
 
-  async function loadUser() {
-    setUserList(await userAPI.list());
-  }
+  useEffect(() => {
+    void (async () => {
+      try {
+        setUserList(await userAPI.list());
+      } catch (error: unknown) {
+        toast.error(error instanceof Error ? error.message : "Unexpected error");
+      }
+    })();
+  }, []);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IRequests>({
-    defaultValues: async () => {
-      const emptyRequest: IRequests = {
-          id: undefined, user: undefined, status: "NEW", rejectionReason: null, requestLine: [],userId: undefined,
-        description: undefined, justification: undefined, deliveryMode: undefined, total: undefined,
-        orderNumber: undefined, requested: undefined
-      };
-
-      await loadUser();
-      if (!id) {
-        emptyRequest.user = user;
-        return emptyRequest;
-      }
-
-      return await requestsAPI.find(Number(id));
+    defaultValues: {
+      id: undefined, user, status: "NEW", rejectionReason: null, requestLines: [], userId: user?.id,
+      description: undefined, justification: undefined, deliveryMode: undefined, total: undefined,
+      orderNumber: undefined, requested: undefined, rejected: "REJECTED", requestsId: undefined,
     },
+    values: isEdit ? existingRequest : undefined,
   });
 
-  const save: SubmitHandler<IRequests> = async (request) => {
+  const save: SubmitHandler<IRequests> = async (requests) => {
     try {
-      delete request.user;
-      if (!request.id) {
-        const newRequest = await requestsAPI.post(request);
-        navigate(`/requests/detail/${newRequest.id}`);
+      delete requests.user;
+      if (!requests.id) {
+        const newRequests = await requestsAPI.post(requests);
+        navigate(`/requests/detail/${newRequests.id}`);
       } else {
-        await requestsAPI.put(request);
-        navigate(`/requests/detail/${request.id}`);
+        await requestsAPI.put(requests);
+        navigate(`/requests/detail/${requests.id}`);
       }
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
@@ -131,12 +130,14 @@ function RequestsForm() {
           <select
             id="userId"
             disabled
+            value={user?.id ?? ""}
             {...register("userId", {
               required: "User is required",
               valueAsNumber: true,
             })}
             className={`form-select ${errors?.userId ? "is-invalid" : ""}`}
           >
+            <option value="">Select…</option>
             {userList.map((s) => (
               <option key={s.id} value={s.id}>{s.firstName} {s.lastName}</option>
             ))}

@@ -23,8 +23,8 @@ function SignIn() {
       const { password: _password, ...safeuser } = await userAPI.findByAccount(
         account.username, account.password
       );
-      persistuser(safeuser as IUsers);   // localStorage
-      setUser(safeuser as IUsers);        // context
+      persistuser(safeuser as IUsers);   
+      setUser(safeuser as IUsers);        
       navigate("/requests");
     } catch {
       toast.error("Unsuccessful sign in. Please try again.");

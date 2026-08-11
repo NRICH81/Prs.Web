@@ -1,4 +1,4 @@
-import {IRequestLine} from "../requestLines/IRequestLine";
+import {IRequestLine} from "../requestLine/IRequestLine";
 import { IUsers } from "../users/IUsers";
 
 export interface IRequests {
@@ -13,6 +13,8 @@ deliveryMode: string | undefined;
 total: number | undefined;
 orderNumber: number | undefined;
 orderDate?: string;
-requestLine?: IRequestLine[]
+requestLines?: IRequestLine[]
 requested: boolean | undefined;
+rejected: string;
+requestsId: number | undefined;
 }

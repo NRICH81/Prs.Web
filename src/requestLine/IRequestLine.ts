@@ -6,10 +6,10 @@ id: number | undefined;
 quantity: number;
 description: string | undefined;
 vendorId: number | undefined;
-requestsId: number | undefined;
+requestId: number | undefined;
 product: IProducts | undefined;
 requests: IRequests | undefined;
 
-productsId: number | undefined;
+productId: number | undefined;
 emptyRequestLine: IRequestLine | null;
 }

@@ -8,12 +8,12 @@
 
 
 export function getTextBackgroundByStatus(status: string) {
-  switch (status) {
+
+  switch (status?.toUpperCase()) {
     case "APPROVED":    return "text-bg-secondary";
     case "NEW": return "text-bg-warning";
     case "REVIEW":     return "text-bg-info";
     case "REJECTED":    return "text-bg-danger";
-    case "Rejected":    return "text-bg-danger";
 
     default:          return "";
   }

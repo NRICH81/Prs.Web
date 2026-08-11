@@ -135,7 +135,7 @@ function UserForm() {
       </div>
 
       <div className="d-flex justify-content-end w-50 mt-4">
-        <Link to="/User" className="btn btn-outline-primary me-2">Cancel</Link>
+        <Link to="/Users" className="btn btn-outline-primary me-2">Cancel</Link>
         <button type="submit" className="btn btn-primary">
           <svg className="bi pe-none me-1" width={16} height={16} fill="#FFFFFF">
             <use xlinkHref={`${bootstrapIcons}#save`} />

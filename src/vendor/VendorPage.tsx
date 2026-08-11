@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import type { IVendor } from "./IVendor";
 import { vendorAPI } from "./VendorAPI";
 import VendorCard from "./VendorCard";
 import VendorCardSkeleton from "./VendorCardSkeleton";
+
+
+
 
 function VendorPage() {
   const [loading, setLoading] = useState(false);
@@ -25,7 +29,7 @@ function VendorPage() {
 
       try {
         const data = await vendorAPI.list();
-        setVendor(data.toSorted((a: IVendor, b: IVendor) => a.sortVendor - b.sortVendor));
+        setVendor(data.toSorted((a, b) => a.name.localeCompare(b.name)));
       } catch (error: unknown) {
         toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
       } finally {
@@ -35,17 +39,28 @@ function VendorPage() {
   }, []);
 
   return (
-    <section className="content container-fluid mx-5 my-2 py-4 ">
-      <div className="d-flex justify-content-between align-items-center pb-4 mb-4 border-bottom border-2">
+    <section className="content container-fluid mx-3 my-2 py-4 ">
+      <div className="d-flex justify-content-between align-items-center pb-4 mb-4 border-bottom border-2 ">
+        
         <h2>Vendor ({vendor.length})</h2>
-        <Link to="/vendor/create" className="btn btn-primary">Add Vendor</Link>
+       <Link to="/vendors/create" className="btn btn-outline-primary">
+  <svg className="bi pe-none me-1" width={16} height={16} fill="currentColor">
+    <use xlinkHref={`${bootstrapIcons}#plus`} />
+  </svg>
+ Create A Vendor
+</Link>
+       
       </div>
 
-      <section className="list d-flex flex-row flex-wrap gap-5 p-4">
+
+      <section className="list d-flex flex-row flex-wrap gap-5 -4">
+        
         {loading && <p>Loading…</p>}
         {loading && VendorCardSkeletons}
+        
         {vendor.map((vendor) => (
           <VendorCard key={vendor.id} vendor={vendor} onRemove={removeVendor} />
+
         ))}
       </section>
     </section>

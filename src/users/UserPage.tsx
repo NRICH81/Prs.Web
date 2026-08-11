@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import bootstrapIcons from '../assets/bootstrap-icons.svg'
 import type { IUsers } from './IUsers'
 import { userAPI } from './UserAPI'
 import UserCard from './UserCard'
@@ -41,8 +42,11 @@ function UserPage() {
 
         <Link
           to="/users/create"
-          className="btn btn-primary"
+          className="btn btn-outline-primary"
         >
+          <svg className="bi pe-none me-1" width={16} height={16} fill="currentColor">
+            <use xlinkHref={`${bootstrapIcons}#plus`} />
+          </svg>
           Add User
         </Link>
       </div>

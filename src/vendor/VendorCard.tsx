@@ -12,17 +12,26 @@ interface IVendorCardProps {
 
 function VendorCard({ vendor, onRemove }: IVendorCardProps) {
   return (
-    <div className="card p-4" style={{ width: "23rem" }}>
-      <div className="d-flex justify-content-end">
+    <div className="card p-3" style={{ width: "15rem" }}>
+      <div className="d-flex justify-content-between align-items-">
+        
+        <span className="fs-5 fw-medium fw-bold">{vendor.name}</span>
+              
         <Dropdown className="d-inline">
-          <Dropdown.Toggle className="btn btn-light no-caret" style={{ background: "none" }}>
+          <Dropdown.Toggle className="btn btn-light no-caret " style={{ background: "none" }}>
             <svg className="bi pe-none" width={20} height={20} fill="#007AFF">
+              
               <use xlinkHref={`${bootstrapIcons}#three-dots-vertical`} />
+          
             </svg>
+            
           </Dropdown.Toggle>
+       
           <Dropdown.Menu>
-            <Dropdown.Item as={Link} to={`/vendor/detail/${vendor.id}`}>View</Dropdown.Item>
-            <Dropdown.Item as={Link} to={`/vendor/edit/${vendor.id}`}>Edit</Dropdown.Item>
+            
+            <Dropdown.Item as={Link} to={`/vendors/detail/${vendor.id}`}>View</Dropdown.Item>
+            
+            <Dropdown.Item as={Link} to={`/vendors/edit/${vendor.id}`}>Edit</Dropdown.Item>
             <Dropdown.Item
               as="a"
               href="#"
@@ -45,8 +54,15 @@ function VendorCard({ vendor, onRemove }: IVendorCardProps) {
         </Dropdown>
       </div>
 
-      <span className="fs-4 fw-medium">{vendor.name}</span>
-      <span className="text-secondary">Sort Vendor: {vendor.sortVendor}</span>
+      <div className="badge text bg-secondary mt-1 align-self-start">{vendor.code}</div>
+      <span>{vendor.address}</span>
+      <span>{vendor.city}, {vendor.state}</span>
+      <span>{vendor.zip}</span>
+      <span>{vendor.phone}</span>
+      <span>{vendor.email}</span>
+      <div className="progress">
+        <div className="progress-bar bg-primary" role="progressbar" style={{ width: "60%" }}></div>
+      </div>
     </div>
   );
 }

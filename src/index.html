@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+      <style>
+       body {
+         margin: 0;
+         font-family: "Raleway", system-ui, -apple-system, "Segoe UI", sans-serif;
+         color: #212529;
+       }
+
+       .app-loading {
+         min-height: 100vh;
+         min-height: 100dvh; /* avoids the mobile browser-chrome jump */
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         gap: 1.5rem;
+         /* the Sign In page's warm radial tint, from App.css */
+         background: rgb(179, 209, 255);
+         background: radial-gradient(
+           ellipse at center,
+           rgb(234, 242, 255) 0%,
+           rgba(0, 122, 255, 0.5) 70%,
+           rgb(0, 39, 102) 100%
+           
+         );
+         
+     .app-loading__brand {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       gap: 1rem;
+       animation: app-loading-pulse 1.6s ease-in-out infinite;
+     }
+
+     .app-loading__name {
+       font-size: 5.125rem;
+       font-weight: 600;
+       color: #0047AB;
+     }
+
+     .app-loading__bar {
+       width: 12rem;
+       height: 0.25rem;
+       border-radius: 999px;
+       background: rgba(0, 122, 255, 0.15);
+       overflow: hidden;
+     }
+
+     .app-loading__bar::before {
+       content: "";
+       display: block;
+       width: 40%;
+       height: 100%;
+       border-radius: 999px;
+       background: #0047AB;
+       animation: app-loading-slide 1.3s ease-in-out infinite;
+     }
+
+     @keyframes app-loading-slide {
+       0% {
+         transform: translateX(-100%);
+       }
+       100% {
+         transform: translateX(250%);
+       }
+     }
+
+     /* Motion is decoration here — the screen still reads fine without it. */
+     @media (prefers-reduced-motion: reduce) {
+       .app-loading__brand {
+         animation: none;
+       }
+       .app-loading__bar::before {
+         animation: none;
+         width: 100%;
+         opacity: 0.6;
+       }
+     }
+
+     /* Visible to screen readers only. */
+     .app-loading__status {
+       position: absolute;
+       width: 1px;
+       height: 1px;
+       overflow: hidden;
+       clip: rect(0 0 0 0);
+       clip-path: inset(50%);
+       white-space: nowrap;
+     }
+
+     @keyframes app-loading-pulse {
+       0%,
+       100% {
+         opacity: 1;
+       }
+       50% {
+         opacity: 0.55;
+       }
+     }
+       }
+     </style>
+</head>
+<body>
+         <div id="root">
+             <div class="app-loading__brand">
+         <svg
+           xmlns="http://www.w3.org/2000/svg"
+           width="98"
+           height="40"
+           viewBox="0 0 78 32"
+           fill="none"
+           aria-hidden="true"
+         >
+           <path d="M16.4992 2H37.5808L22.0816 24.9729H1L16.4992 2Z" fill="#007AFF" />
+          <path d="M17.4224 27.102L11.4192 36H33.5008L49 13.0271H32.7024L23.2064 27.102H17.4224Z" fill="#0047AB" />
+         </svg>
+         <span class="app-loading__name">PURCHASE REQUEST SYSTEM</span>
+       </div>
+              <div class="app-loading__bar" aria-hidden="true"></div>
+       <span class="app-loading__status">Loading the application…</span>
+     </div>
+</body>
+</html>

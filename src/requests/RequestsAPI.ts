@@ -27,21 +27,20 @@ export const requestsAPI = {
   },
   find(id: number): Promise<IRequests> {
     return fetch(`${url}/${id}`).then(checkStatus).then(parseJSON);
-  },
-markNew(id: number) {
-  return fetch(`${url}/${id}/marknew`, { method: "PUT" }).then(checkStatus);
+
 },
-  markReview(id: number) {
-    return fetch(`${url}/${id}/markreview`, { method: "PUT" }).then(checkStatus);
+  review(id: number): Promise<IRequests> {
+    return fetch(`${url}/${id}/review`, { method: "PUT" }).then(checkStatus).then(parseJSON);
   },
-  markApproved(id: number) {
-    return fetch(`${url}/${id}/markApproved`, { method: "PUT" }).then(checkStatus);
+  approve(id: number): Promise<IRequests> {
+    return fetch(`${url}/${id}/approve`, { method: "PUT" }).then(checkStatus).then(parseJSON);
   },
-  cancel(id: number, rejectionReason: string) {
-    return fetch(`${url}/${id}/cancel`, {
+  reject(id: number, rejectionReason: string): Promise<IRequests> {
+    
+    return fetch(`${url}/${id}/reject`, {
       method: "PUT",
-      body: JSON.stringify({ rejectionReason }),
+      body: JSON.stringify(rejectionReason),
       headers: { "Content-Type": "application/json" },
-    }).then(checkStatus);
+    }).then(checkStatus).then(parseJSON);
   },
 };

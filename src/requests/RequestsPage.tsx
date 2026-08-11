@@ -1,6 +1,7 @@
 import { useEffect, useState, SyntheticEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import { IRequests } from "./IRequests";
 import { requestsAPI } from "./RequestsAPI";
 import RequestsRow from "./RequestsRow";
@@ -30,10 +31,15 @@ function RequestsPage() {
   }
 
   return (
-    <section className="content container-fluid mx-5 my-2 py-4">
+    <section className="content container-fluid mx-3 my-2 py-4">
       <div className="d-flex justify-content-between align-items-center pb-4 mb-4 border-bottom border-2">
         <h2>Requests</h2>
-        <Link to="/requests/create" className="btn btn-primary">Add Request</Link>
+        <Link to="/requests/create" className="btn btn-outline-primary">
+          <svg className="bi pe-none me-1" width={16} height={16} fill="currentColor">
+            <use xlinkHref={`${bootstrapIcons}#plus`} />
+          </svg>
+          Add Request
+        </Link>
       </div>
       <section className="list bg-body-tertiary p-4 rounded-4">
         <select
@@ -49,7 +55,7 @@ function RequestsPage() {
           <option value="REJECTED">Rejected</option>
         
         </select>
-        <table className="table table-hover w-100 rounded-4">
+        <table className="table table-hover w-75 rounded-2">
                     <thead>
             <tr>
               <th scope="col"> #</th>

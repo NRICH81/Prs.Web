@@ -2,7 +2,7 @@
 import { IProducts } from "./IProducts";
 import { BASE_URL, checkStatus, parseJSON } from "../utility/fetchUtilities"
 
-const url = `${BASE_URL}/Products`;
+const url = `${BASE_URL}/products`;
 
 export const productsAPI = {
   list(): Promise<IProducts[]> {
@@ -18,10 +18,10 @@ export const productsAPI = {
       headers: { "Content-Type": "application/json" },
     }).then(checkStatus).then(parseJSON);
   },
-  put(Products: IProducts): Promise<IProducts> {
-    return fetch(`${url}/${Products.id}`, {
+  put(products: IProducts): Promise<IProducts> {
+    return fetch(`${url}/${products.id}`, {
       method: "PUT",
-      body: JSON.stringify(Products),
+      body: JSON.stringify(products),
       headers: { "Content-Type": "application/json" },
     }).then(checkStatus).then(parseJSON);
   },

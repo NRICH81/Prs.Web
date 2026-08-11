@@ -1,7 +1,8 @@
-// src/products/ProductsPage.tsx
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import type { IProducts } from "./IProducts";
 import { productsAPI } from "./ProductsAPI";
 import ProductsCard from "./ProductsCard";
@@ -38,13 +39,18 @@ function ProductsPage() {
       <div className="d-flex justify-content-between align-items-center pb-4 mb-4 border-bottom border-2">
         <h2>Products</h2>
 
-        <Link to="/products/create" className="btn btn-primary">Add Item</Link>
+        <Link to="/products/create" className="btn btn-outline-primary">
+          <svg className="bi pe-none me-1" width={16} height={16} fill="currentColor">
+            <use xlinkHref={`${bootstrapIcons}#plus`} />
+          </svg>
+          Add Item
+        </Link>
       </div>
       <section className="list d-flex flex-row flex-wrap gap-5 p-4">
         {loading && <p>Loading…</p>}
         {loading && ProductsCardSkeletons}
-        {products.map((product) => (
-          <ProductsCard key={product.id} products={product} onRemove={removeProducts} />
+        {products.map((products) => (
+          <ProductsCard key={products.id} products={products} onRemove={removeProducts} />
         ))}
       </section>
     </section>

@@ -1,4 +1,4 @@
-import "bootstrap/dist/css/bootstrap.min.css";   // back in App now (it left the tree in Lesson 5)
+import "bootstrap/dist/css/bootstrap.min.css";   
 import "./App.css";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
@@ -16,7 +16,7 @@ import { UserContext } from "./UserContext";
    const [users, setUser] = useState<IUsers | undefined>(getPersistedUser());
    return (
      <UserContext.Provider value={{ user: users, setUser }}>
-     <Toaster toastOptions={{success: { iconTheme: { primary: "#FF7A00", secondary: "white" } }, style: { maxWidth: 500 }, }} />
+     <Toaster toastOptions={{success: { iconTheme: { primary: "#312ECB", secondary: "white" } }, style: { maxWidth: 500 }, }} />
        <Outlet />
      </UserContext.Provider>
    );

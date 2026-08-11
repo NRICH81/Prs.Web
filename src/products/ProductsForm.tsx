@@ -23,17 +23,17 @@ function ProductsForm() {
 
   const { register, handleSubmit, formState: { errors } } = useForm<IProducts>({
     defaultValues: async () => {
-      await loadVendor();                 // dropdown options, either mode
-      if (!id) return emptyProducts;          // Create → blank record
-      return await productsAPI.find(Number(id)); // Edit → fetch the record
+      await loadVendor();                 
+      if (!id) return emptyProducts;        
+      return await productsAPI.find(Number(id)); 
     },
   });
 
   const save: SubmitHandler<IProducts> = async (products) => {
     try {
-      delete products.vendor;               // send vendorId, not the embedded object
-      if (!products.id) await productsAPI.post(products);   // no id → Create
-      else await productsAPI.put(products);                 // has id → Edit
+      delete products.vendor;               
+      if (!products.id) await productsAPI.post(products);   
+      else await productsAPI.put(products);                
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
       return;
@@ -61,7 +61,11 @@ function ProductsForm() {
       <div className="mb-3 w-50">
         <label htmlFor="vendorId" className="form-label">Vendor</label>
         <select id="vendorId"
-          {...register("vendorId", { valueAsNumber: true, required: "Vendor is required" })}
+          {...register("vendorId", {
+            valueAsNumber: true,
+            required: "Vendor is required",
+            validate: (v) => !Number.isNaN(v) || "Vendor is required",
+          })}
           className={`form-select ${errors?.vendorId && "is-invalid"}`}>
           <option value="">Select Vendors…</option>
           {vendor.map((c) => (
