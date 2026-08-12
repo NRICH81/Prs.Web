@@ -58,7 +58,7 @@ function UserPage() {
         {users.map((user) => (
           <UserCard
             key={user.id}
-            User={user}
+            user={user}
             onRemove={removeUser}
           />
         ))}

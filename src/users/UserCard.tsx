@@ -7,13 +7,13 @@ import toast from 'react-hot-toast';
 import { formatPhoneNumber } from '../utility/formatUtilities';
 
 interface IUserCardProps {
-  User: IUsers;
+  user: IUsers;
   onRemove: (User: IUsers) => void;
 }
 
-function UserCard({ User, onRemove }: IUserCardProps) {
+function UserCard({ user: user, onRemove }: IUserCardProps) {
   // Admin outranks Reviewer, so only the highest role is shown.
-  const roles = User.isAdmin ? 'Admin' : User.isReviewer ? 'Reviewer' : '';
+  const roles = user.isAdmin ? 'Admin' : user.isReviewer ? 'Reviewer' : '';
 
   return (
     <div className="d-flex gap-4" style={{ width: '25rem' }}>
@@ -21,12 +21,12 @@ function UserCard({ User, onRemove }: IUserCardProps) {
         className="d-flex align-items-center justify-content-center rounded-circle bg-secondary fs-3 text-white me-2 flex-shrink-0"
         style={{ width: '6rem', height: '6rem' }}
       >
-        {User.firstName?.[0]}{User.lastName?.[0]}
+        {user.firstName?.[0]}{user.lastName?.[0]}
       </div>
 
       <address className="mb-0">
         <strong>
-          {User.firstName} {User.lastName}
+          {user.firstName} {user.lastName}
           <Dropdown className="d-inline">
             <Dropdown.Toggle className="btn btn-light no-caret" style={{ background: 'none' }}>
               <svg className="bi pe-none" width={20} height={20} fill="#007AFF">
@@ -34,13 +34,13 @@ function UserCard({ User, onRemove }: IUserCardProps) {
               </svg>
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item as={Link} to={`/Users/edit/${User.id}`}>Edit</Dropdown.Item>
+              <Dropdown.Item as={Link} to={`/Users/edit/${user.id}`}>Edit</Dropdown.Item>
               <Dropdown.Item as="a" href="#" onClick={async (event) => {
                 event.preventDefault();
-                if (confirm('Delete this User member?') && User.id) {
+                if (confirm('Delete this User member?') && user.id) {
                   try {
-                    await userAPI.delete(User.id);
-                    onRemove(User);
+                    await userAPI.delete(user.id);
+                    onRemove(user);
                     toast.success('Successfully deleted.');
                   } catch (error: unknown) {
                     toast.error(error instanceof Error ? error.message : 'Unexpected error', { duration: 6000 });
@@ -51,13 +51,13 @@ function UserCard({ User, onRemove }: IUserCardProps) {
           </Dropdown>
         </strong>
         <br />
-        <span className="text-secondary">{User.username}</span>
+        <span className="text-secondary">{user.username}</span>
         <br />
         <span className="text-secondary">{roles || 'no role assigned'}</span>
         <br />
-        <span className="text-secondary">{formatPhoneNumber(User.phone)}</span>
+        <span className="text-secondary">{formatPhoneNumber(user.phone)}</span>
         <br />
-        <span className="text-secondary">{User.email}</span>
+        <span className="text-secondary">{user.email}</span>
       </address>
     </div>
   );
