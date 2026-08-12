@@ -8,10 +8,10 @@ import { formatPhoneNumber } from '../utility/formatUtilities';
 
 interface IUserCardProps {
   user: IUsers;
-  onRemove: (User: IUsers) => void;
+  onRemove: (user: IUsers) => void;
 }
 
-function UserCard({ user: user, onRemove }: IUserCardProps) {
+function UserCard({ user, onRemove }: IUserCardProps) {
   // Admin outranks Reviewer, so only the highest role is shown.
   const roles = user.isAdmin ? 'Admin' : user.isReviewer ? 'Reviewer' : '';
 
