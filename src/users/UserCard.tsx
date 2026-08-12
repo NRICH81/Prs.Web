@@ -1,4 +1,4 @@
-import type { IUsers } from './IUsers';
+import type { IUser } from './IUser';
 import bootstrapIcons from '../assets/bootstrap-icons.svg';
 import { userAPI } from './UserAPI';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -7,8 +7,8 @@ import toast from 'react-hot-toast';
 import { formatPhoneNumber } from '../utility/formatUtilities';
 
 interface IUserCardProps {
-  user: IUsers;
-  onRemove: (user: IUsers) => void;
+  user: IUser;
+  onRemove: (user: IUser) => void;
 }
 
 function UserCard({ user, onRemove }: IUserCardProps) {
@@ -34,7 +34,7 @@ function UserCard({ user, onRemove }: IUserCardProps) {
               </svg>
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item as={Link} to={`/Users/edit/${user.id}`}>Edit</Dropdown.Item>
+              <Dropdown.Item as={Link} to={`/users/edit/${user.id}`}>Edit</Dropdown.Item>
               <Dropdown.Item as="a" href="#" onClick={async (event) => {
                 event.preventDefault();
                 if (confirm('Delete this User member?') && user.id) {

@@ -2,16 +2,16 @@ import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
-import { IRequestLine } from "../requestLine/IRequestLine";
-import { requestLineAPI } from "../requestLine/RequestLineAPI";
-import { requestsAPI } from "./RequestsAPI";
-import RequestsHeader from "./RequestsHeader";
+import { IRequestLine } from "../requestLines/IRequestLine";
+import { requestLineAPI } from "../requestLines/RequestLineAPI";
+import { requestAPI } from "./RequestAPI";
+import RequestHeader from "./RequestHeader";
 import { money } from "../utility/formatUtilities";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import { useRequest } from "./useRequest";
 import { useUserContext } from "../UserContext";
 
-function RequestsDetailPage() {
+function RequestDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { request: requests, loading, reload: loadRequest } = useRequest(id ? Number(id) : undefined);
   const { user } = useUserContext();
@@ -26,7 +26,7 @@ function RequestsDetailPage() {
   async function sendForReview() {
     if (!requests?.id) return;
     try {
-      await requestsAPI.review(requests.id);
+      await requestAPI.review(requests.id);
       toast.success("Request sent for review.");
       navigate("/requests");
     } catch (error: unknown) {
@@ -37,7 +37,7 @@ function RequestsDetailPage() {
   async function approve() {
     if (!requests?.id) return;
     try {
-      await requestsAPI.approve(requests.id);
+      await requestAPI.approve(requests.id);
       toast.success("Request approved.");
       navigate("/requests");
     } catch (error: unknown) {
@@ -56,7 +56,7 @@ function RequestsDetailPage() {
     if (!rejectReason.trim()) { setRejectError("Rejection reason is required."); return; }
     if (!requests?.id) return;
     try {
-      await requestsAPI.reject(requests.id, rejectReason);
+      await requestAPI.reject(requests.id, rejectReason);
       handleCloseRejectModal();
       toast.success("Request REJECTED.");
       navigate("/requests");
@@ -112,7 +112,7 @@ function RequestsDetailPage() {
           You cannot approve or reject a request you submitted yourself.
         </div>
       )}
-      {requests && <RequestsHeader request={requests} />}
+      {requests && <RequestHeader request={requests} />}
       {requests && (
         <div className="card p-4 mt-5">
           <h5 className="card-title">Requests</h5>
@@ -132,7 +132,7 @@ function RequestsDetailPage() {
                 
                   <td>{money((requestLine.product?.price ?? 0) * requestLine.quantity)}</td>
                   <td>
-                    <Link to={`/requests/detail/${requests.id}/RequestLine/edit/${requestLine.id}`}
+                    <Link to={`/requests/detail/${requests.id}/requestline/edit/${requestLine.id}`}
                       className="btn btn-outline-secondary btn-sm me-1" title="Edit">
                       <svg className="bi pe-none" width={16} height={16} fill="currentColor">
                         <use xlinkHref={`${bootstrapIcons}#pencil`} />
@@ -156,7 +156,7 @@ function RequestsDetailPage() {
             <tfoot>
               <tr>
                 <td>
-                  <Link to={`/requests/detail/${requests.id}/requestLine/create`}
+                  <Link to={`/requests/detail/${requests.id}/requestline/create`}
                     className="btn btn-outline-primary">
                     <svg className="bi pe-none me-1" width={16} height={16} fill="currentColor">
                       <use xlinkHref={`${bootstrapIcons}#plus`} />
@@ -208,4 +208,4 @@ function RequestsDetailPage() {
   );
 }
 
-export default RequestsDetailPage;
+export default RequestDetailPage;

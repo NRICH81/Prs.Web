@@ -1,6 +1,6 @@
-import { IVendor } from "../vendor/IVendor";
+import { IVendor } from "../vendors/IVendor";
 
-export interface IProducts{
+export interface IProduct{
   vendorId: number | undefined;
   name: string;
   price: number | undefined;

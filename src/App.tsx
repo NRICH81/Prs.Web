@@ -3,7 +3,7 @@ import "./App.css";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { IUsers } from "./users/IUsers";
+import { IUser } from "./users/IUser";
 import { UserContext } from "./UserContext";
 
  function getPersistedUser() {
@@ -13,7 +13,7 @@ import { UserContext } from "./UserContext";
  }
 
  function App() {
-   const [user, setUser] = useState<IUsers | undefined>(getPersistedUser());
+   const [user, setUser] = useState<IUser | undefined>(getPersistedUser());
    return (
      <UserContext.Provider value={{ user: user, setUser }}>
      <Toaster toastOptions={{success: { iconTheme: { primary: "#312ECB", secondary: "white" } }, style: { maxWidth: 500 }, }} />

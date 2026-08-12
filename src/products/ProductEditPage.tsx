@@ -1,6 +1,6 @@
-import ProductForm from "./ProductsForm";
+import ProductForm from "./ProductForm";
 
-function ProductsEditPage() {
+function ProductEditPage() {
   return (
     <section className="content container-fluid mx-5 my-2 py-4">
       <div className="d-flex justify-content-between pb-4 mb-5 border-bottom border-2">
@@ -11,4 +11,4 @@ function ProductsEditPage() {
   );
 }
 
-export default ProductsEditPage;
+export default ProductEditPage;

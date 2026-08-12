@@ -1,4 +1,4 @@
-export interface IUsers {
+export interface IUser {
   id: number | undefined;
   firstName: string;
   lastName: string;

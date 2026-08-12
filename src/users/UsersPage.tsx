@@ -2,19 +2,19 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import bootstrapIcons from '../assets/bootstrap-icons.svg'
-import type { IUsers } from './IUsers'
+import type { IUser } from './IUser'
 import { userAPI } from './UserAPI'
 import UserCard from './UserCard'
 import UserCardSkeleton from "./UserCardSkeleton";
 
-function UserPage() {
+function UsersPage() {
   const [loading, setLoading] = useState(false);
-  const [users, setUsers  ] = useState<IUsers[]>([]);
+  const [users, setUsers  ] = useState<IUser[]>([]);
   const userCardSkeletons = Array.from(Array(12), (_value, index) => (
     <UserCardSkeleton key={index} />
   ));
 
-  function removeUser(user: IUsers) {
+  function removeUser(user: IUser) {
     setUsers((currentUser) =>
       currentUser.filter((s) => s.id !== user.id)
     );
@@ -54,6 +54,7 @@ function UserPage() {
       <section className="list d-flex flex-row flex-wrap gap-4 bg-light p-4 rounded-4">
         {loading && <p>Loading…</p>}
         {loading && userCardSkeletons}
+        {!loading && users.length === 0 && <p className="text-muted">No users yet.</p>}
 
         {users.map((user) => (
           <UserCard
@@ -69,4 +70,4 @@ function UserPage() {
 
 
 
-export default UserPage;
+export default UsersPage;

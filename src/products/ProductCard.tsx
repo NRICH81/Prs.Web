@@ -1,17 +1,17 @@
-import { IProducts } from "./IProducts";
+import { IProduct } from "./IProduct";
  import { Link } from "react-router-dom";
  import Dropdown from "react-bootstrap/Dropdown";
  import bootstrapIcons from "../assets/bootstrap-icons.svg";
- import { productsAPI } from "./ProductsAPI";
+ import { productAPI } from "./ProductAPI";
  import { money } from "../utility/formatUtilities";
  import toast from "react-hot-toast";
 
-interface IProductsCardProps {
-  products: IProducts;
-  onRemove: (products: IProducts) => void;
+interface IProductCardProps {
+  product: IProduct;
+  onRemove: (product: IProduct) => void;
 }
 
-function ProductsCard({ products, onRemove }: IProductsCardProps) {
+function ProductCard({ product, onRemove }: IProductCardProps) {
   return (
     <div className="card p-4" style={{ width: "23rem" }}>
       <div className="progress">
@@ -25,13 +25,13 @@ function ProductsCard({ products, onRemove }: IProductsCardProps) {
              </svg>
            </Dropdown.Toggle>
            <Dropdown.Menu>
-             <Dropdown.Item as={Link} to={`/products/edit/${products.id}`}>Edit</Dropdown.Item>
+             <Dropdown.Item as={Link} to={`/products/edit/${product.id}`}>Edit</Dropdown.Item>
              <Dropdown.Item as="a" href="#" onClick={async (event) => {
                event.preventDefault();
-               if (confirm("Are you sure you want to delete this product?") && products.id) {
+               if (confirm("Are you sure you want to delete this product?") && product.id) {
                  try {
-                   await productsAPI.delete(products.id);
-                   onRemove(products);
+                   await productAPI.delete(product.id);
+                   onRemove(product);
                    toast.success("Successfully deleted.");
                  } catch (error: unknown) {
                    toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
@@ -41,17 +41,17 @@ function ProductsCard({ products, onRemove }: IProductsCardProps) {
           </Dropdown.Menu>
          </Dropdown>
        </div>
-      <span className="fs-4 fw-medium">{products.name}</span>
+      <span className="fs-4 fw-medium">{product.name}</span>
       <span className="fs-5 fw-light">
-        {products.price != null ? money(products.price) : ""}
-        {products.unit && ` / ${products.unit}`}
+        {product.price != null ? money(product.price) : ""}
+        {product.unit && ` / ${product.unit}`}
       </span>
-      <span className="text-muted">{products.vendor?.name}</span>
-      {products.partNumber && (
-        <div className="badge text bg-secondary mt-1 align-self-start">{products.partNumber}</div>
+      <span className="text-muted">{product.vendor?.name}</span>
+      {product.partNumber && (
+        <div className="badge text bg-secondary mt-1 align-self-start">{product.partNumber}</div>
       )}
     </div>
   );
 }
 
-export default ProductsCard;
+export default ProductCard;

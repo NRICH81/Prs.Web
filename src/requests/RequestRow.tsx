@@ -1,7 +1,7 @@
-import { IRequests } from "./IRequests";
+import { IRequest } from "./IRequest";
 import { getTextBackgroundByStatus } from "../utility/formatUtilities";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
-import { requestsAPI, } from "./RequestsAPI";
+import { requestAPI, } from "./RequestAPI";
  import Dropdown from "react-bootstrap/Dropdown";
  import { Link } from "react-router-dom";
  import toast from "react-hot-toast";
@@ -9,12 +9,12 @@ import { requestsAPI, } from "./RequestsAPI";
 
 
 
-interface IRequestsRowProps {
-  request: IRequests;
-  onRemove: (request: IRequests) => void;
+interface IRequestRowProps {
+  request: IRequest;
+  onRemove: (request: IRequest) => void;
 }
 
- function RequestsRow({ request, onRemove }: IRequestsRowProps) {
+ function RequestRow({ request, onRemove }: IRequestRowProps) {
   return (
     <tr>
       <th scope="row">{request.id}</th>
@@ -50,7 +50,7 @@ interface IRequestsRowProps {
                if (confirm("Are you sure you want to delete this order?")) {
                  if (request.id) {
                    try {
-                     await requestsAPI.delete(request.id);
+                     await requestAPI.delete(request.id);
                      onRemove(request);   
                      toast.success("Successfully deleted.");
                    } catch (error: unknown) {
@@ -68,4 +68,4 @@ interface IRequestsRowProps {
     );
   }
 
-export default RequestsRow;
+export default RequestRow;

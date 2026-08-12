@@ -2,17 +2,17 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from "react";
-import { IProducts } from "./IProducts";
-import { IVendor } from "../vendor/IVendor";
-import { productsAPI } from "./ProductsAPI";
-import { vendorAPI } from "../vendor/VendorAPI";
+import { IProduct } from "./IProduct";
+import { IVendor } from "../vendors/IVendor";
+import { productAPI } from "./ProductAPI";
+import { vendorAPI } from "../vendors/VendorAPI";
 import toast from "react-hot-toast";
 
-const emptyProducts: IProducts = {vendor: undefined, id: undefined, price: undefined, vendorId: undefined, name: "",
+const emptyProduct: IProduct = {vendor: undefined, id: undefined, price: undefined, vendorId: undefined, name: "",
   partNumber: "", unit: "",
 };
 
-function ProductsForm() {
+function ProductForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [vendor, setVendor] = useState<IVendor[]>([]);
@@ -21,19 +21,19 @@ function ProductsForm() {
     setVendor(await vendorAPI.list());
   }
 
-  const { register, handleSubmit, formState: { errors } } = useForm<IProducts>({
+  const { register, handleSubmit, formState: { errors } } = useForm<IProduct>({
     defaultValues: async () => {
       await loadVendor();                 
-      if (!id) return emptyProducts;        
-      return await productsAPI.find(Number(id)); 
+      if (!id) return emptyProduct;        
+      return await productAPI.find(Number(id)); 
     },
   });
 
-  const save: SubmitHandler<IProducts> = async (products) => {
+  const save: SubmitHandler<IProduct> = async (product) => {
     try {
-      delete products.vendor;               
-      if (!products.id) await productsAPI.post(products);   
-      else await productsAPI.put(products);                
+      delete product.vendor;               
+      if (!product.id) await productAPI.post(product);   
+      else await productAPI.put(product);                
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
       return;
@@ -101,4 +101,4 @@ function ProductsForm() {
   );
 }
 
-export default ProductsForm;
+export default ProductForm;

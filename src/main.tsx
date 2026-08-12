@@ -5,24 +5,24 @@ import App from "./App";
 import Index from "./Index";
 import ProductsPage from "./products/ProductsPage";
 import RequestsPage from "./requests/RequestsPage";
-import UserPage from "./users/UserPage";
+import UsersPage from "./users/UsersPage";
 import UserCreatePage from "./users/UserCreatePage";
 import RequiredAdmin from "./account/RequiredAdmin";
 import ErrorPage from "./ErrorPage";
-import ProductsCreatePage from "./products/ProductsCreatePage";
-import ProductsEditPage from "./products/ProductsEditPage";
-import  RequestsDetailPage  from "./requests/RequestsDetailPage";
-import RequestsCreatePage from "./requests/RequestsCreatePage";
-import RequestsEditPage from "./requests/RequestsEditPage";
-import VendorDetailPage from "./vendor/VendorDetailPage";
-import VendorPage from "./vendor/VendorPage";
-import VendorCreatePage from "./vendor/VendorCreatePage";
-import VendorEditPage from "./vendor/VendorEditPage";
-import RequestLineCreate from "./requestLine/RequestLineCreate";
-import RequestLineEdit from "./requestLine/RequestLineEdit";
+import ProductCreatePage from "./products/ProductCreatePage";
+import ProductEditPage from "./products/ProductEditPage";
+import  RequestDetailPage  from "./requests/RequestDetailPage";
+import RequestCreatePage from "./requests/RequestCreatePage";
+import RequestEditPage from "./requests/RequestEditPage";
+import VendorDetailPage from "./vendors/VendorDetailPage";
+import VendorsPage from "./vendors/VendorsPage";
+import VendorCreatePage from "./vendors/VendorCreatePage";
+import VendorEditPage from "./vendors/VendorEditPage";
+import RequestLineCreate from "./requestLines/RequestLineCreate";
+import RequestLineEdit from "./requestLines/RequestLineEdit";
 import SignIn from "./account/SignIn";
 import Layout from "./Layout";
-import UsersEditPage from "./users/UsersEditPage";
+import UserEditPage from "./users/UserEditPage";
 
 const router = createBrowserRouter([
   {
@@ -36,25 +36,25 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
           { index: true, element: <Index /> },
-          { path: "Requests", element: <RequestsPage /> },
-          { path: "Requests/create", element: <RequestsCreatePage /> },
-          { path: "requests/edit/:id", element: <RequestsEditPage /> },
-          { path: "Requests/detail/:id", element: <RequestsDetailPage /> },
-          { path: "Requests/detail/:id/RequestLine/Create", element: <RequestLineCreate /> },
-          { path: "Requests/detail/:id/RequestLine/edit/:itemId", element: <RequestLineEdit /> },
+          { path: "requests", element: <RequestsPage /> },
+          { path: "requests/create", element: <RequestCreatePage /> },
+          { path: "requests/edit/:id", element: <RequestEditPage /> },
+          { path: "requests/detail/:id", element: <RequestDetailPage /> },
+          { path: "requests/detail/:id/requestline/create", element: <RequestLineCreate /> },
+          { path: "requests/detail/:id/requestline/edit/:itemId", element: <RequestLineEdit /> },
           {
             element: <RequiredAdmin />,
             children: [
-              { path: "Products", element: <ProductsPage /> },
-              { path: "Products/create", element: <ProductsCreatePage /> },
-              { path: "Products/edit/:id", element: <ProductsEditPage /> },
-              { path: "Users", element: <UserPage /> },
-              { path: "Users/create", element: <UserCreatePage /> },
-              { path: "Users/edit/:id", element: <UsersEditPage /> },
-              { path: "Vendors", element: <VendorPage /> },
-              { path: "Vendors/create", element: <VendorCreatePage /> },
-              { path: "Vendors/edit/:id", element: <VendorEditPage /> },
-              { path: "Vendors/detail/:id", element: <VendorDetailPage /> },
+              { path: "products", element: <ProductsPage /> },
+              { path: "products/create", element: <ProductCreatePage /> },
+              { path: "products/edit/:id", element: <ProductEditPage /> },
+              { path: "users", element: <UsersPage /> },
+              { path: "users/create", element: <UserCreatePage /> },
+              { path: "users/edit/:id", element: <UserEditPage /> },
+              { path: "vendors", element: <VendorsPage /> },
+              { path: "vendors/create", element: <VendorCreatePage /> },
+              { path: "vendors/edit/:id", element: <VendorEditPage /> },
+              { path: "vendors/detail/:id", element: <VendorDetailPage /> },
             ]
           }
         ]

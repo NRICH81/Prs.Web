@@ -10,10 +10,10 @@ import VendorCardSkeleton from "./VendorCardSkeleton";
 
 
 
-function VendorPage() {
+function VendorsPage() {
   const [loading, setLoading] = useState(false);
   const [vendor, setVendor] = useState<IVendor[]>([]);
-  const VendorCardSkeletons = Array.from(Array(12), (_value, index) => (
+  const vendorCardSkeletons = Array.from(Array(12), (_value, index) => (
     <VendorCardSkeleton key={index} />
   ));
 
@@ -56,7 +56,8 @@ function VendorPage() {
       <section className="list d-flex flex-row flex-wrap gap-5 -4">
         
         {loading && <p>Loading…</p>}
-        {loading && VendorCardSkeletons}
+        {loading && vendorCardSkeletons}
+        {!loading && vendor.length === 0 && <p className="text-muted">No vendors yet.</p>}
         
         {vendor.map((vendor) => (
           <VendorCard key={vendor.id} vendor={vendor} onRemove={removeVendor} />
@@ -67,4 +68,4 @@ function VendorPage() {
   );
 }
 
-export default VendorPage;
+export default VendorsPage;

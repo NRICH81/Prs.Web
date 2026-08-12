@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { userAPI } from "../users/UserAPI";
 import { useUserContext } from "../UserContext";
-import {  IUsers } from "../users/IUsers";
+import {  IUser } from "../users/IUser";
 
 interface IAccount { username: string; password: string; }
 
-function persistuser(user: IUsers) {
+function persistuser(user: IUser) {
   localStorage.setItem("user", JSON.stringify(user));
 }
 
@@ -23,8 +23,8 @@ function SignIn() {
       const { password: _password, ...safeuser } = await userAPI.findByAccount(
         account.username, account.password
       );
-      persistuser(safeuser as IUsers);   
-      setUser(safeuser as IUsers);        
+      persistuser(safeuser as IUser);   
+      setUser(safeuser as IUser);        
       navigate("/requests");
     } catch {
       toast.error("Unsuccessful sign in. Please try again.");

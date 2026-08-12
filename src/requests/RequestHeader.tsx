@@ -1,11 +1,11 @@
-import { IRequests } from "./IRequests";
+import { IRequest } from "./IRequest";
 import { getTextBackgroundByStatus } from "../utility/formatUtilities";
 
-interface IRequestsHeaderProps {
-  request: IRequests;
+interface IRequestHeaderProps {
+  request: IRequest;
 }
 
-function RequestsHeader({ request }: IRequestsHeaderProps) {
+function RequestHeader({ request }: IRequestHeaderProps) {
   return (
     <section className="d-flex flex-wrap gap-4 justify-content-between pe-5">
       <dl>
@@ -44,4 +44,4 @@ function RequestsHeader({ request }: IRequestsHeaderProps) {
   );
 }
 
-export default RequestsHeader;
+export default RequestHeader;

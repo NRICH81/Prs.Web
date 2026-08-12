@@ -2,20 +2,20 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
-import type { IRequests } from "./IRequests";
-import type { IUsers} from "../users/IUsers";
-import { requestsAPI } from "./RequestsAPI";
+import type { IRequest } from "./IRequest";
+import type { IUser} from "../users/IUser";
+import { requestAPI } from "./RequestAPI";
 import { userAPI } from "../users/UserAPI";
 import { useUserContext } from "../UserContext";
 import { useRequest } from "./useRequest";
 import toast from "react-hot-toast";
 
-function RequestsForm() {
+function RequestForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEdit = Boolean(id);
   const { user: user } = useUserContext();
-  const [userList, setUserList] = useState<IUsers[]>([]);
+  const [userList, setUserList] = useState<IUser[]>([]);
   const { request: existingRequest } = useRequest(id ? Number(id) : undefined);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function RequestsForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IRequests>({
+  } = useForm<IRequest>({
     defaultValues: {
       id: undefined, user, status: "NEW", rejectionReason: null, requestLines: [], userId: user?.id,
       description: undefined, justification: undefined, deliveryMode: undefined, total: undefined,
@@ -40,15 +40,15 @@ function RequestsForm() {
     values: isEdit ? existingRequest : undefined,
   });
 
-  const save: SubmitHandler<IRequests> = async (requests) => {
+  const save: SubmitHandler<IRequest> = async (request) => {
     try {
-      delete requests.user;
-      if (!requests.id) {
-        const newRequests = await requestsAPI.post(requests);
-        navigate(`/requests/detail/${newRequests.id}`);
+      delete request.user;
+      if (!request.id) {
+        const newRequest = await requestAPI.post(request);
+        navigate(`/requests/detail/${newRequest.id}`);
       } else {
-        await requestsAPI.put(requests);
-        navigate(`/requests/detail/${requests.id}`);
+        await requestAPI.put(request);
+        navigate(`/requests/detail/${request.id}`);
       }
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
@@ -159,4 +159,4 @@ function RequestsForm() {
 }
    
 
-export default RequestsForm;
+export default RequestForm;

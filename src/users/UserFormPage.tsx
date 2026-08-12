@@ -1,11 +1,12 @@
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import type { IUsers } from "./IUsers";
+import type { IUser } from "./IUser";
 import { userAPI } from "./UserAPI";
 import toast from "react-hot-toast";
 
-const emptyUser: IUsers = {
+const emptyUser: IUser = {
   id: undefined,
   firstName: "",
   lastName: "",
@@ -21,29 +22,30 @@ const emptyUser: IUsers = {
 function UserForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IUsers>({
+  } = useForm<IUser>({
     defaultValues: async () => {
       if (!id) return emptyUser;
       return await userAPI.find(Number(id));
     },
   });
 
-  const save: SubmitHandler<IUsers> = async (User) => {
+  const save: SubmitHandler<IUser> = async (user) => {
     try {
-      if (!User.id) await userAPI.post(User);
-      else await userAPI.put(User);
+      if (!user.id) await userAPI.post(user);
+      else await userAPI.put(user);
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
       return;
     }
 
     toast.success("Successfully saved.");
-    navigate("/Users");
+    navigate("/users");
   };
 
   return (
@@ -95,17 +97,29 @@ function UserForm() {
 
       <div className="mb-3 w-50">
         <label htmlFor="password" className="form-label">Password</label>
-        <input
-          id="password"
-          type="password"
-          maxLength={60}
-          {...register("password", {
-            required: "Password is required",
-            maxLength: { value: 60, message: "Password is too long" },
-          })}
-          className={`form-control ${errors?.password ? "is-invalid" : ""}`}
-        />
-        <div className="invalid-feedback">{errors?.password?.message}</div>
+        <div className="input-group">
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            maxLength={60}
+            {...register("password", {
+              required: "Password is required",
+              maxLength: { value: 60, message: "Password is too long" },
+            })}
+            className={`form-control ${errors?.password ? "is-invalid" : ""}`}
+          />
+          <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => setShowPassword((current) => !current)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            <svg className="bi pe-none" width={16} height={16} fill="currentColor">
+              <use xlinkHref={`${bootstrapIcons}#${showPassword ? "eye-slash" : "eye"}`} />
+            </svg>
+          </button>
+          <div className="invalid-feedback">{errors?.password?.message}</div>
+        </div>
       </div>
 
       <div className="mb-3 w-50">
@@ -151,7 +165,7 @@ function UserForm() {
       </div>
 
       <div className="d-flex justify-content-end w-50 mt-4">
-        <Link to="/Users" className="btn btn-outline-primary me-2">Cancel</Link>
+        <Link to="/users" className="btn btn-outline-primary me-2">Cancel</Link>
         <button type="submit" className="btn btn-primary">
           <svg className="bi pe-none me-1" width={16} height={16} fill="#FFFFFF">
             <use xlinkHref={`${bootstrapIcons}#save`} />

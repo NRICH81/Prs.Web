@@ -1,4 +1,4 @@
-function ProductsCardSkeleton() {
+function ProductCardSkeleton() {
   return (
     <div className="card p-4" style={{ width: "23rem" }}>
       <div className="progress">
@@ -12,4 +12,4 @@ function ProductsCardSkeleton() {
   );
 }
 
-export default ProductsCardSkeleton;
+export default ProductCardSkeleton;
