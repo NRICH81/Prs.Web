@@ -4,8 +4,8 @@ import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import { IRequestLine} from "./IRequestLine";
-import { IProduct } from "../products/IProducts";
-import { productAPI } from "../products/ProductsAPI";
+import { IProduct } from "../products/IProduct";
+import { productAPI } from "../products/ProductAPI";
 import { requestLineAPI } from "./RequestLineAPI";
 
 function RequestLineForm() {
@@ -37,8 +37,8 @@ defaultValues: async () => {
   });
 
   async function loadProducts() {
-    const data = await productAPI.list();
-    setProducts(data);
+    const { items } = await productAPI.list(1, 1000);
+    setProducts(items);
   }
 
   const productId = watch("productId");
