@@ -11,10 +11,5 @@ user: IUsers | undefined;
  status: string;
 deliveryMode: string | undefined;
 total: number | undefined;
-orderNumber: number | undefined;
-orderDate?: string;
 requestLines?: IRequestLine[]
-requested: boolean | undefined;
-rejected: string;
-requestsId: number | undefined;
 }

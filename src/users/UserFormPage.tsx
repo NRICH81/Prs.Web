@@ -53,7 +53,11 @@ function UserForm() {
         <input
           id="firstName"
           type="text"
-          {...register("firstName", { required: "First name is required" })}
+          maxLength={30}
+          {...register("firstName", {
+            required: "First name is required",
+            maxLength: { value: 30, message: "First name is too long" },
+          })}
           className={`form-control ${errors?.firstName ? "is-invalid" : ""}`}
         />
         <div className="invalid-feedback">{errors?.firstName?.message}</div>
@@ -64,7 +68,11 @@ function UserForm() {
         <input
           id="lastName"
           type="text"
-          {...register("lastName", { required: "Last name is required" })}
+          maxLength={30}
+          {...register("lastName", {
+            required: "Last name is required",
+            maxLength: { value: 30, message: "Last name is too long" },
+          })}
           className={`form-control ${errors?.lastName ? "is-invalid" : ""}`}
         />
         <div className="invalid-feedback">{errors?.lastName?.message}</div>
@@ -75,6 +83,7 @@ function UserForm() {
         <input
           id="username"
           type="text"
+          maxLength={50}
           {...register("username", {
             required: "Username is required",
             maxLength: { value: 50, message: "Username is too long" },
@@ -89,6 +98,7 @@ function UserForm() {
         <input
           id="password"
           type="password"
+          maxLength={60}
           {...register("password", {
             required: "Password is required",
             maxLength: { value: 60, message: "Password is too long" },
@@ -103,8 +113,10 @@ function UserForm() {
         <input
           id="email"
           type="email"
+          maxLength={255}
           {...register("email", {
             pattern: { value: /^$|^\S+@\S+\.\S+$/, message: "Enter a valid email" },
+            maxLength: { value: 255, message: "Email is too long" },
           })}
           className={`form-control ${errors?.email ? "is-invalid" : ""}`}
         />
@@ -116,9 +128,13 @@ function UserForm() {
         <input
           id="phone"
           type="text"
-          {...register("phone")}
-          className="form-control"
+          maxLength={12}
+          {...register("phone", {
+            maxLength: { value: 12, message: "Phone is too long" },
+          })}
+          className={`form-control ${errors?.phone ? "is-invalid" : ""}`}
         />
+        <div className="invalid-feedback">{errors?.phone?.message}</div>
       </div>
 
       <div className="mb-3 w-100">

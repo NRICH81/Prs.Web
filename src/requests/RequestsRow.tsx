@@ -25,7 +25,7 @@ interface IRequestsRowProps {
       
       <td>
         <span className={`badge ${getTextBackgroundByStatus(request.status)}`}>
-          {request.status}
+          {request.status?.toUpperCase()}
         </span>
       </td>
       <td>${request.total}</td>

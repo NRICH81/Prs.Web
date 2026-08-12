@@ -52,14 +52,15 @@ function RequestsPage() {
           <option value="APPROVED">Approved</option>
           <option value="NEW">New</option>
           <option value="REVIEW">Review</option>
-          <option value="REJECTED">Rejected</option>
+          <option value="REJECTED">REJECTED</option>
         
         </select>
         <table className="table table-hover w-75 rounded-2">
                     <thead>
             <tr>
-              <th scope="col"> #</th>
+            
               <th scope="col">Description</th>
+              <th scope="col">Justification</th>
               <th scope="col">Status</th>
               <th scope="col">Total</th>
               <th scope="col">Requested By</th>

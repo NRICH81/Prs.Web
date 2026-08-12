@@ -9,7 +9,7 @@ import { vendorAPI } from "../vendor/VendorAPI";
 import toast from "react-hot-toast";
 
 const emptyProducts: IProducts = {vendor: undefined, id: undefined, price: undefined, vendorId: undefined, name: "",
-  categoryId: undefined,
+  partNumber: "", unit: "",
 };
 
 function ProductsForm() {
@@ -44,7 +44,7 @@ function ProductsForm() {
 
   return (
     <form className="d-flex flex-wrap w-75 gap-2" onSubmit={handleSubmit(save)}>
-      <div className="mb-3 w-75">
+      <div className="mb-3 w-50">
         <label htmlFor="name" className="form-label">Name</label>
         <input id="name" type="text"
           {...register("name", { required: "Name is required" })}
@@ -52,11 +52,25 @@ function ProductsForm() {
         <div className="invalid-feedback">{errors?.name?.message}</div>
       </div>
       <div className="mb-3 w-25">
+        <label htmlFor="partNumber" className="form-label">Product Number</label>
+        <input id="partNumber" type="text" maxLength={20}
+          {...register("partNumber", { required: "Product Number is required" })}
+          className={`form-control ${errors?.partNumber && "is-invalid"}`} />
+        <div className="invalid-feedback">{errors?.partNumber?.message}</div>
+      </div>
+      <div className="mb-3 w-20">
         <label htmlFor="price" className="form-label">Price</label>
         <input id="price" type="number" step="0.01"
           {...register("price", { valueAsNumber: true, required: "Price is required" })}
           className={`form-control ${errors?.price && "is-invalid"}`} />
         <div className="invalid-feedback">{errors?.price?.message}</div>
+      </div>
+      <div className="mb-3 w-25">
+        <label htmlFor="unit" className="form-label">Unit</label>
+        <input id="unit" type="text" placeholder="each"
+          {...register("unit", { required: "Unit is required" })}
+          className={`form-control ${errors?.unit && "is-invalid"}`} />
+        <div className="invalid-feedback">{errors?.unit?.message}</div>
       </div>
       <div className="mb-3 w-50">
         <label htmlFor="vendorId" className="form-label">Vendor</label>

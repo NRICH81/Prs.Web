@@ -18,6 +18,10 @@ function RequestsDetailPage() {
   const navigate = useNavigate();
 
   const isOwnRequest = !!user && !!requests && user.id === requests.userId;
+  // Computed client-side (not requests.total) so the footer always reflects the current line items.
+  const total = requests?.requestLines?.reduce(
+    (sum, requestLine) => sum + (requestLine.product?.price ?? 0) * requestLine.quantity, 0
+  ) ?? 0;
 
   async function sendForReview() {
     if (!requests?.id) return;
@@ -54,7 +58,7 @@ function RequestsDetailPage() {
     try {
       await requestsAPI.reject(requests.id, rejectReason);
       handleCloseRejectModal();
-      toast.success("Request rejected.");
+      toast.success("Request REJECTED.");
       navigate("/requests");
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Unexpected error");
@@ -97,7 +101,7 @@ function RequestsDetailPage() {
           {requests?.status?.toUpperCase() === "REVIEW" && (
             <>
               <button className="btn btn-success" onClick={approve} disabled={isOwnRequest} title="Approve">Approve</button>
-              <button className="btn btn-outline-danger" onClick={handleShowRejectModal} disabled={isOwnRequest} title="Reject">Reject</button>
+              <button className="btn btn-outline-danger" onClick={handleShowRejectModal} disabled={isOwnRequest} title="REJECTED">Reject</button>
             </>
           )}
         </div>
@@ -143,6 +147,11 @@ function RequestsDetailPage() {
                   </td>
                 </tr>
               ))}
+              {requests.requestLines?.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="text-muted text-center py-3">No items added yet.</td>
+                </tr>
+              )}
             </tbody>
             <tfoot>
               <tr>
@@ -155,7 +164,7 @@ function RequestsDetailPage() {
                     Add RequestLine
                   </Link>
                 </td>
-                <td /><td /><td>{money(requests.total ?? 0)}</td><td />
+                <td /><td /><td>{money(total)}</td><td />
               </tr>
             </tfoot>
           </table>
@@ -175,7 +184,7 @@ function RequestsDetailPage() {
       </Modal>
       <Modal show={showRejectModal} onHide={handleCloseRejectModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Reject Request</Modal.Title>
+          <Modal.Title>REJECTED Request</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="mb-3">

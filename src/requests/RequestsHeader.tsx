@@ -8,39 +8,37 @@ interface IRequestsHeaderProps {
 function RequestsHeader({ request }: IRequestsHeaderProps) {
   return (
     <section className="d-flex flex-wrap gap-4 justify-content-between pe-5">
-     <dl>
-  <dt>#</dt>
-  <dd>{request.orderNumber}</dd>
-  <dt>Description</dt>
-  <dd>{request.description || "—"}</dd>
-  <dd className="text-muted small">{request.justification || "—"}</dd>
-  {request.rejectionReason && (
-    <>
-      <dt>Rejection Reason</dt>
-      <dd className="text-danger">{request.rejectionReason}</dd>
-    </>
-  )}
-</dl>
       <dl>
+       
+        <dt>Description</dt>
+        <dd>{request.description || "—"}</dd>
+        
+        <dt>Justification</dt>
+        <dd>{request.justification || "—"}</dd>
+      </dl>
+      <dl>
+        <dt>Delivery Mode</dt>
+        <dd>{request.deliveryMode || "—"}</dd>
+     
         <dt>Status</dt>
         <dd>
           <span className={`badge ${getTextBackgroundByStatus(request.status)}`}>
-            {request.status}
+            {request.status?.toUpperCase()}
           </span>
         </dd>
-            <dt>Total</dt>
-            <dd>
-          {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
-            .format(request.total ?? 0)}
-        </dd>
+        
       </dl>
       <dl>
         <dt>Requested By</dt>
         <dd>{request.user?.firstName} {request.user?.lastName}</dd>
-          <dd className="text-muted small">{request.deliveryMode || "—"}</dd>
-        
-        
-        
+
+        {request.status?.toUpperCase() === "REJECTED" && (
+          <>
+            <dt>Rejection Reason</dt>
+            <dd>{request.rejectionReason || ""}</dd>
+          
+          </>
+        )}
       </dl>
     </section>
   );

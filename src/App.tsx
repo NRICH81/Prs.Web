@@ -7,15 +7,15 @@ import { IUsers } from "./users/IUsers";
 import { UserContext } from "./UserContext";
 
  function getPersistedUser() {
-   const userAsJSON = localStorage.getItem("users");
+   const userAsJSON = localStorage.getItem("user");
    if (!userAsJSON) return undefined;
    return JSON.parse(userAsJSON);
  }
 
  function App() {
-   const [users, setUser] = useState<IUsers | undefined>(getPersistedUser());
+   const [user, setUser] = useState<IUsers | undefined>(getPersistedUser());
    return (
-     <UserContext.Provider value={{ user: users, setUser }}>
+     <UserContext.Provider value={{ user: user, setUser }}>
      <Toaster toastOptions={{success: { iconTheme: { primary: "#312ECB", secondary: "white" } }, style: { maxWidth: 500 }, }} />
        <Outlet />
      </UserContext.Provider>

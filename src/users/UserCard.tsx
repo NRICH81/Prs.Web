@@ -12,7 +12,8 @@ interface IUserCardProps {
 }
 
 function UserCard({ User, onRemove }: IUserCardProps) {
-  const roles = [User.isAdmin && 'Admin', User.isReviewer && 'Reviewer'].filter(Boolean).join(', ');
+  // Admin outranks Reviewer, so only the highest role is shown.
+  const roles = User.isAdmin ? 'Admin' : User.isReviewer ? 'Reviewer' : '';
 
   return (
     <div className="d-flex gap-4" style={{ width: '25rem' }}>

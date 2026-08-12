@@ -8,7 +8,7 @@ import {  IUsers } from "../users/IUsers";
 interface IAccount { username: string; password: string; }
 
 function persistuser(user: IUsers) {
-  localStorage.setItem("users", JSON.stringify(user));
+  localStorage.setItem("user", JSON.stringify(user));
 }
 
 function SignIn() {

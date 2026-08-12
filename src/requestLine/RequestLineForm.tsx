@@ -11,7 +11,7 @@ import { requestLineAPI } from "./RequestLineAPI";
 function RequestLineForm() {
 const { id, itemId } = useParams<{ id: string; itemId: string }>();
 const requestsId = Number(id);
-const RequestLineId = Number(itemId);
+const requestLineId = Number(itemId);
   const navigate = useNavigate();
   const [products, setProducts] = useState<IProducts[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<IProducts | undefined>(undefined);
@@ -28,7 +28,7 @@ defaultValues: async () => {
   try {
     await loadProducts();
     if (!itemId) return emptyRequestLine;
-    return await requestLineAPI.find(RequestLineId);
+    return await requestLineAPI.find(requestLineId);
   } catch (error: unknown) {
     toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
     return emptyRequestLine;
@@ -97,7 +97,7 @@ const save: SubmitHandler<IRequestLine> = async (RequestLine) => {
 
         <div className="mb-3">
           <label htmlFor="quantity" className="form-label">Quantity</label>
-          <input id="quantity" type="number"
+          <input id="quantity" type="number" min={1}
             {...register("quantity", {
               required: "Quantity is required",
               min: { value: 1, message: "Quantity must be at least 1" },
@@ -105,6 +105,7 @@ const save: SubmitHandler<IRequestLine> = async (RequestLine) => {
             })}
             className={`form-control ${errors?.quantity && "is-invalid"}`} />
           <div className="invalid-feedback">{errors?.quantity?.message}</div>
+          
         </div>
 
    

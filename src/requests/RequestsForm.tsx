@@ -36,7 +36,6 @@ function RequestsForm() {
     defaultValues: {
       id: undefined, user, status: "NEW", rejectionReason: null, requestLines: [], userId: user?.id,
       description: undefined, justification: undefined, deliveryMode: undefined, total: undefined,
-      orderNumber: undefined, requested: undefined, rejected: "REJECTED", requestsId: undefined,
     },
     values: isEdit ? existingRequest : undefined,
   });
@@ -115,10 +114,10 @@ function RequestsForm() {
             {...register("status", { required: "Status is required" })}
             className={`form-select ${errors?.status ? "is-invalid" : ""}`}
           >
-            <option value="NEW">New</option>
-            <option value="REVIEW">Review</option>
-            <option value="APPROVED">Approved</option>
-            <option value="REJECTED">Rejected</option>
+            <option value="NEW">NEW</option>
+            <option value="REVIEW">REVIEW</option>
+            <option value="APPROVED">APPROVED</option>
+            <option value="REJECTED">REJECTED</option>
           </select>
           <div className="invalid-feedback">{errors?.status?.message}</div>
         </div>

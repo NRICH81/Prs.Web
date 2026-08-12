@@ -52,8 +52,8 @@ function VendorForm() {
     <form className="d-flex flex-wrap w-75 gap-2" onSubmit={handleSubmit(save)}>
       <div className="mb-3 w-25">
         <label htmlFor="code" className="form-label">Vendor Code</label>
-        <input id="code" type="text"
-          {...register("code", { required: "Code is required" })}
+        <input id="code" type="text" maxLength={7}
+          {...register("code", { required: "Code is required", maxLength: { value: 7, message: "Code cannot be more than 7 characters" } })}
           className={`form-control ${errors?.code && "is-invalid"}`} />
         <div className="invalid-feedback">{errors?.code?.message}</div>
       </div>

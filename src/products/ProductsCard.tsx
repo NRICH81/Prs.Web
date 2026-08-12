@@ -3,6 +3,7 @@ import { IProducts } from "./IProducts";
  import Dropdown from "react-bootstrap/Dropdown";
  import bootstrapIcons from "../assets/bootstrap-icons.svg";
  import { productsAPI } from "./ProductsAPI";
+ import { money } from "../utility/formatUtilities";
  import toast from "react-hot-toast";
 
 interface IProductsCardProps {
@@ -13,6 +14,9 @@ interface IProductsCardProps {
 function ProductsCard({ products, onRemove }: IProductsCardProps) {
   return (
     <div className="card p-4" style={{ width: "23rem" }}>
+      <div className="progress">
+        <div className="progress-bar bg-primary" role="progressbar" style={{ width: "60%" }}></div>
+      </div>
              <div className="d-flex justify-content-end">
          <Dropdown>
            <Dropdown.Toggle className="btn btn-light no-caret" style={{ background: "none" }}>
@@ -38,7 +42,14 @@ function ProductsCard({ products, onRemove }: IProductsCardProps) {
          </Dropdown>
        </div>
       <span className="fs-4 fw-medium">{products.name}</span>
-      <span className="fs-5 fw-light">${products.price}</span>
+      <span className="fs-5 fw-light">
+        {products.price != null ? money(products.price) : ""}
+        {products.unit && ` / ${products.unit}`}
+      </span>
+      <span className="text-muted">{products.vendor?.name}</span>
+      {products.partNumber && (
+        <div className="badge text bg-secondary mt-1 align-self-start">{products.partNumber}</div>
+      )}
     </div>
   );
 }
