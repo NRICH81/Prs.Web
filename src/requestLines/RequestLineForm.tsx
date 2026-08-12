@@ -1,19 +1,17 @@
 ﻿import { useEffect, useState } from "react";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Typeahead } from "react-bootstrap-typeahead";
-import "react-bootstrap-typeahead/css/Typeahead.css";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import { IRequestLine} from "./IRequestLine";
-import { IProduct } from "../products/IProduct";
-import { productAPI } from "../products/ProductAPI";
+import { IProduct } from "../products/IProducts";
+import { productAPI } from "../products/ProductsAPI";
 import { requestLineAPI } from "./RequestLineAPI";
 
 function RequestLineForm() {
 const { id, itemId } = useParams<{ id: string; itemId: string }>();
 const requestsId = Number(id);
-const requestLineId = Number(itemId);
+const RequestLineId = Number(itemId);
   const navigate = useNavigate();
   const [products, setProducts] = useState<IProduct[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(undefined);
@@ -24,14 +22,13 @@ const requestLineId = Number(itemId);
     register,
     handleSubmit,
     watch,
-    control,
     formState: { errors },
   } = useForm<IRequestLine>({
 defaultValues: async () => {
   try {
     await loadProducts();
     if (!itemId) return emptyRequestLine;
-    return await requestLineAPI.find(requestLineId);
+    return await requestLineAPI.find(RequestLineId);
   } catch (error: unknown) {
     toast.error(error instanceof Error ? error.message : "Unexpected error", { duration: 6000 });
     return emptyRequestLine;
@@ -40,8 +37,8 @@ defaultValues: async () => {
   });
 
   async function loadProducts() {
-    const { items } = await productAPI.list(1, 1000);
-    setProducts(items);
+    const data = await productAPI.list();
+    setProducts(data);
   }
 
   const productId = watch("productId");
@@ -52,13 +49,13 @@ defaultValues: async () => {
     setSelectedProduct(currentProducts);
   }, [productId, products]);
 
-const save: SubmitHandler<IRequestLine> = async (requestLine) => {
+const save: SubmitHandler<IRequestLine> = async (RequestLine) => {
     try {
-      requestLine.requestId = requestsId;   
-      if (!requestLine.id) {
-        requestLine = await requestLineAPI.post(requestLine);
+      RequestLine.requestId = requestsId;   // always tie the line back to its parent request
+      if (!RequestLine.id) {
+        RequestLine = await requestLineAPI.post(RequestLine);
       } else {
-        await requestLineAPI.put(requestLine);
+        await requestLineAPI.put(RequestLine);
       }
       toast.success("Successfully saved.");
       navigate(`/requests/detail/${requestsId}`);
@@ -74,26 +71,16 @@ const save: SubmitHandler<IRequestLine> = async (requestLine) => {
 
         <div className="mb-3">
           <label htmlFor="productId" className="form-label">Menu Item</label>
-          <Controller
-            name="productId"
-            control={control}
-            rules={{ required: "Menu item is required" }}
-            render={({ field }) => (
-              <Typeahead
-                id="productId"
-                labelKey="name"
-                placeholder="Search for a menu item…"
-                options={products}
-                selected={products.filter((m) => m.id === field.value)}
-                onChange={(selected) => field.onChange((selected[0] as IProduct | undefined)?.id)}
-                onBlur={field.onBlur}
-                isInvalid={!!errors?.productId}
-              />
-            )}
-          />
-          <div className="invalid-feedback" style={{ display: errors?.productId ? "block" : "none" }}>
-            {errors?.productId?.message}
-          </div>
+          <select
+            {...register("productId", { valueAsNumber: true, required: "Menu item is required" })}
+            className={`form-select ${errors?.productId && "is-invalid"}`}
+          >
+            <option value="0">Select…</option>
+            {products.map((m) => (
+              <option key={m.id} value={m.id}>{m.name}</option>
+            ))}
+          </select>
+          <div className="invalid-feedback">{errors?.productId?.message}</div>
         </div>
 
         <div className="mb-3">
@@ -106,7 +93,7 @@ const save: SubmitHandler<IRequestLine> = async (requestLine) => {
 
         <div className="mb-3">
           <label htmlFor="quantity" className="form-label">Quantity</label>
-          <input id="quantity" type="number" min={1}
+          <input id="quantity" type="number"
             {...register("quantity", {
               required: "Quantity is required",
               min: { value: 1, message: "Quantity must be at least 1" },
@@ -114,10 +101,15 @@ const save: SubmitHandler<IRequestLine> = async (requestLine) => {
             })}
             className={`form-control ${errors?.quantity && "is-invalid"}`} />
           <div className="invalid-feedback">{errors?.quantity?.message}</div>
-          
         </div>
 
-   
+        <div className="mb-3">
+          <label htmlFor="notes" className="form-label">Notes</label>
+          <input id="notes" type="text" {...register("description")}
+            className="form-control"
+            placeholder="Enter any notes for this item (optional)" />
+        </div>
+
         <div className="mb-3">
           <label className="form-label">Amount</label>
           <div className="form-label">
