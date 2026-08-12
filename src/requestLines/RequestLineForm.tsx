@@ -1,11 +1,13 @@
 ﻿import { useEffect, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
 import bootstrapIcons from "../assets/bootstrap-icons.svg";
 import { IRequestLine} from "./IRequestLine";
-import { IProducts } from "../products/IProducts";
-import { productsAPI } from "../products/ProductsAPI";
+import { IProduct } from "../products/IProduct";
+import { productAPI } from "../products/ProductAPI";
 import { requestLineAPI } from "./RequestLineAPI";
 
 function RequestLineForm() {
@@ -13,8 +15,8 @@ const { id, itemId } = useParams<{ id: string; itemId: string }>();
 const requestsId = Number(id);
 const requestLineId = Number(itemId);
   const navigate = useNavigate();
-  const [products, setProducts] = useState<IProducts[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<IProducts | undefined>(undefined);
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>(undefined);
 
   const emptyRequestLine: IRequestLine = { id: undefined, product: undefined, quantity: 1, description: "", vendorId: undefined,  productId: undefined, requests: undefined, requestId: requestsId, emptyRequestLine: null };
 
@@ -22,6 +24,7 @@ const requestLineId = Number(itemId);
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useForm<IRequestLine>({
 defaultValues: async () => {
@@ -37,8 +40,8 @@ defaultValues: async () => {
   });
 
   async function loadProducts() {
-    const data = await productsAPI.list();
-    setProducts(data);
+    const { items } = await productAPI.list(1, 1000);
+    setProducts(items);
   }
 
   const productId = watch("productId");
@@ -49,13 +52,13 @@ defaultValues: async () => {
     setSelectedProduct(currentProducts);
   }, [productId, products]);
 
-const save: SubmitHandler<IRequestLine> = async (RequestLine) => {
+const save: SubmitHandler<IRequestLine> = async (requestLine) => {
     try {
-      RequestLine.requestId = requestsId;   
-      if (!RequestLine.id) {
-        RequestLine = await requestLineAPI.post(RequestLine);
+      requestLine.requestId = requestsId;   
+      if (!requestLine.id) {
+        requestLine = await requestLineAPI.post(requestLine);
       } else {
-        await requestLineAPI.put(RequestLine);
+        await requestLineAPI.put(requestLine);
       }
       toast.success("Successfully saved.");
       navigate(`/requests/detail/${requestsId}`);
@@ -71,20 +74,26 @@ const save: SubmitHandler<IRequestLine> = async (RequestLine) => {
 
         <div className="mb-3">
           <label htmlFor="productId" className="form-label">Menu Item</label>
-          <select
-            {...register("productId", {
-              valueAsNumber: true,
-              required: "Menu item is required",
-              validate: (v) => v !== 0 || "Menu item is required",
-            })}
-            className={`form-select ${errors?.productId && "is-invalid"}`}
-          >
-            <option value="0">Select…</option>
-            {products.map((m) => (
-              <option key={m.id} value={m.id}>{m.name}</option>
-            ))}
-          </select>
-          <div className="invalid-feedback">{errors?.productId?.message}</div>
+          <Controller
+            name="productId"
+            control={control}
+            rules={{ required: "Menu item is required" }}
+            render={({ field }) => (
+              <Typeahead
+                id="productId"
+                labelKey="name"
+                placeholder="Search for a menu item…"
+                options={products}
+                selected={products.filter((m) => m.id === field.value)}
+                onChange={(selected) => field.onChange((selected[0] as IProduct | undefined)?.id)}
+                onBlur={field.onBlur}
+                isInvalid={!!errors?.productId}
+              />
+            )}
+          />
+          <div className="invalid-feedback" style={{ display: errors?.productId ? "block" : "none" }}>
+            {errors?.productId?.message}
+          </div>
         </div>
 
         <div className="mb-3">
